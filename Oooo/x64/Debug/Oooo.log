@@ -1,0 +1,6 @@
+﻿  Oooo.c
+C:\Users\Рената\source\repos\Oooo\Oooo\Oooo.c(10,8): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Рената\source\repos\Oooo\Oooo\Oooo.c(25,48): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Рената\source\repos\Oooo\Oooo\Oooo.c(31,9): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Рената\source\repos\Oooo\Oooo\Oooo.c(25,41): warning C4244: инициализация: преобразование "__int64" в "unsigned int", возможна потеря данных
+  Oooo.vcxproj -> C:\Users\Рената\source\repos\Oooo\x64\Debug\Oooo.exe

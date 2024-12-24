@@ -1,0 +1,4 @@
+﻿  Oooo.c
+C:\Users\Рената\source\repos\Oooo\Oooo\Oooo.c(13,21): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Рената\source\repos\Oooo\Oooo\Oooo.c(42,47): warning C4244: инициализация: преобразование "__int64" в "int", возможна потеря данных
+  Oooo.vcxproj -> C:\Users\Рената\source\repos\Oooo\Oooo\x64\Debug\Oooo.exe
