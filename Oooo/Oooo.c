@@ -1,65 +1,66 @@
-﻿#include <stdio.h>
-#include <string.h>
-#include <locale.h>
- 
-void letterscounting(FILE* _file, FILE* file_) {
-	int cO = 0, co = 0;
-	char let[1000];
-	int kol;
-	char* anotherline;
-	kol = fread(let, 1, sizeof(let) - 1, _file);
-	while (kol) {
-		for (int i = 0; i < kol; i++) {
-			if (let[i] != '\n') {
-				if (let[i] == 'O') cO++;
-				else if (let[i] == 'o') co++;
-			}
-			else {
-				fprintf(file_, "O - %d, o - %d\n", cO, co);
-				cO = co = 0;
-			}
-		}
-		if (let[kol - 1] != '\n') {
-			anotherline = strrchr(let, '\n');
-			if (anotherline) {
-				for (unsigned i = anotherline - let + 1; i < kol; i++) {
-					if (let[i] == 'O') cO++;	
-					else if (let[i] == 'o') co++;
-				}
-			}
-		}
-		kol = fread(let, 1, sizeof(let) - 1, _file);
-	}
-	if (cO > 0 || co > 0) fprintf(_file, "O: %d, o: %d\n", cO, co);
-}
+﻿#define _CRT_SECURE_NO_WARNINGS
 
-void readprint(char* filename) {
-	char buf[1000];
-	FILE* file = fopen(filename, "r");
-	if (!file) {
-		printf("Ошибка открытия файла");
-		return;
-	}
-	printf("Содержимое файла %s:\n", filename);
-	while (fgets(buf, 1000, file)) {
-		printf("%s", buf);
-	}
-}
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define BUFFER_SIZE 4096
 
 int main() {
-	setlocale(LC_ALL, "Rus");
-	FILE* _file = fopen("lab4-test-file.txt", "r");
-	if (!_file) {
-		printf("Ошибка открытия файла");
-		return 1;
-	}
-	FILE* file_ = fopen("bruh.txt", "w");
-	if (!file_) {
-		printf("Ошибка открытия файла");
-		return 1;
-	}
-	letterscounting(_file, file_);
-	fclose(file_);
-	readprint("bruh.txt");
-	return 0;
+    FILE* inputFile = fopen("lab4-test-file.txt", "r");
+    FILE* outputFile = fopen("output.txt", "w");
+
+    if (inputFile == NULL) {
+        perror("Error opening input.txt");
+        return 1;
+    }
+
+    if (outputFile == NULL) {
+        perror("Error opening output.txt");
+        fclose(inputFile);
+        return 1;
+    }
+
+    char buffer[BUFFER_SIZE];
+    char lineBuffer[BUFFER_SIZE * 2] = "";
+    int countO = 0, counto = 0, lineNumber = 1;
+
+    while (!feof(inputFile)) {
+        size_t bytesRead = fread(buffer, 1, BUFFER_SIZE, inputFile);
+
+        for (size_t i = 0; i < bytesRead; i++) {
+            if (buffer[i] == '\n') {
+                fprintf(outputFile, "Line %d: O: %d, o: %d\n", lineNumber, countO, counto);
+
+                countO = 0;
+                counto = 0;
+                lineNumber++;
+            }
+            else {
+                if (buffer[i] == 'O') countO++;
+                else if (buffer[i] == 'o') counto++;
+            }
+        }
+    }
+
+    if (countO || counto)
+        fprintf(outputFile, "Line %d: O: %d, o: %d\n", lineNumber, countO, counto);
+
+    fclose(inputFile);
+    fclose(outputFile);
+
+    outputFile = fopen("output.txt", "r");
+    if (outputFile == NULL) {
+        perror("Error reopening output.txt");
+        return 1;
+    }
+
+    printf("Contents of output.txt:\n");
+    while (fgets(buffer, BUFFER_SIZE, outputFile) != NULL) {
+        printf("%s", buffer);
+    }
+
+    fclose(outputFile);
+
+    return 0;
 }
